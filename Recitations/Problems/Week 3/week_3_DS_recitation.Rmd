@@ -1,0 +1,191 @@
+---
+title: "Week 3 DS Recitation"
+author: "Waveley Qiu & Tucker Morgan"
+date: '2022-06-17'
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+set.seed(20220617)
+library(tidyverse)
+
+# set knitr defaults
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.align = "center",
+  fig.width = 6,
+  fig.asp   = .6,
+  out.width = "90%",
+  cache = TRUE
+)
+
+# set theme defaults
+theme_set(
+  theme_bw() +
+    theme(
+      legend.position = "bottom",
+      plot.title    = element_text(hjust = 0.5),
+      plot.subtitle = element_text(hjust = 0.5),
+      plot.caption  = element_text(hjust = 0.0)
+    )
+)
+
+# set color scale defaults
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill   = "viridis"
+)
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete   = scale_fill_viridis_d
+```
+
+## Writing with Data
+
+### Part 1: Named Code Chunk
+
+```{r creating_data}
+df1 <- tibble(
+  rand_vec = rnorm(500, mean = 1),
+  log_vec = rand_vec > 0,
+  num_vec = abs(rand_vec)
+)
+```
+
+### Part 2: Histogram
+
+```{r}
+df1 %>% ggplot(aes(x = num_vec)) + geom_histogram()
+```
+
+### Part 3: In-line Median
+
+The median value of the absolute value variable is `r df1 %>% pull(num_vec) %>% median() %>% round(2)`
+
+### Part 4: Mean, Median, and SD of Random Sample
+
+* Mean: `r df1 %>% pull(rand_vec) %>% mean() %>% round(2)`
+* Median: `r df1 %>% pull(rand_vec) %>% median() %>% round(2)`
+* SD: `r df1 %>% pull(rand_vec) %>% sd() %>% round(2)`
+
+## Data Import
+
+### Part 1: Absolute and Relative Paths
+
+```{r}
+pups <- read_csv("data/FAS_pups.csv") %>% 
+  janitor::clean_names()
+
+pups <- 
+  read_csv("C:/Users/14088/Documents/R/RWorkspace/SIBDS/solutions/week_3_ds_recitation/data/FAS_pups.csv") %>%
+  janitor::clean_names()
+```
+
+### Part 2: Breaking Paths
+
+The absolute path does not work after moving the project directory, but the relative path is flexible and still works in allowing us to read in the data.
+
+### Part 3: Column Parsing
+
+```{r}
+pups_bad <- read_csv("data/FAS_pups.csv", col_types = "cccccc") %>% 
+  janitor::clean_names()
+```
+
+If the specifications for column parsing are not reasonable, the variables will appear in formats that you would not expect (numeric variables are character)
+
+### Part 4: tidyverse vs. Base R
+
+```{r}
+pups_dplyr <- read_csv("data/FAS_pups.csv") %>% 
+  janitor::clean_names()
+
+pups_baser <- read.csv("data/FAS_pups.csv") 
+```
+
+`read_csv` reads in the dataset as a tibble, while `read.csv` reads in the dataset as a dataframe. 
+
+### Part 5
+
+```{r}
+pups$sex
+```
+
+After using `janitor::clean_names()`, the variable once named "Sex" is now named "sex".
+
+When we type `pups$s`, R auto-fills the variable name and allows us to select `pups$sex`.
+
+
+## Data Manipulation
+
+### Part 1
+
+```{r}
+pups_cols <- pups %>%
+  select(litter_number, sex, pd_ears)
+```
+
+### Part 2
+
+#### Filter A
+
+```{r}
+pups %>% filter(sex == 1)
+```
+
+#### Filter B
+
+```{r}
+pups %>% filter(pd_walk < 11 & sex == 2)
+```
+
+#### Filter C
+
+```{r}
+pups <- pups %>%
+  mutate(pd_pivot_7 = pd_pivot - 7) %>%
+  relocate(pd_pivot_7)
+pups
+```
+
+#### Filter D
+
+```{r}
+pups <- 
+  pups %>%
+  mutate(
+    pd_sum = sum(pd_ears, pd_eyes, pd_pivot, pd_walk)
+  )
+pups
+```
+
+### Part 3
+
+```{r}
+pups_fin <- read_csv("data/FAS_pups.csv") %>% 
+  janitor::clean_names() %>%
+  filter(sex == 1) %>%
+  select(-pd_ears) %>%
+  mutate(
+    pd_pivot_greater_7 = pd_pivot >= 7
+  )
+
+pups_fin
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

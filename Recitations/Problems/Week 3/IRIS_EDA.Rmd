@@ -1,0 +1,67 @@
+---
+title: "Data Analysis on Iris Dataset"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+author: "SIBDS @ Columbia"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 1
+    code_folding: "show"
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+data(iris)
+```
+
+## Introduction
+
+The iris dataset is a famous dataset in the field of statistics and machine learning. It contains measurements of various features of iris flowers, such as sepal length, sepal width, petal length, and petal width. The goal of this data analysis is to explore the dataset and gain insights into the characteristics of the different iris flower species.
+
+## Exploratory Data Analysis
+
+```{r}
+# View the first few rows of the dataset
+head(iris)
+```
+
+```{r}
+# Summary statistics
+summary(iris)
+```
+
+
+```{r}
+gtsummary::tbl_summary(iris)
+```
+
+
+## Data Visualization
+```{r}
+# Scatter plot of sepal length vs. sepal width
+plot(iris$Sepal.Length, iris$Sepal.Width, main = "Scatter Plot: Sepal Length vs. Sepal Width",
+     xlab = "Sepal Length", ylab = "Sepal Width", col = iris$Species)
+
+# Histogram of petal length
+hist(iris$Petal.Length, main = "Histogram: Petal Length",
+     xlab = "Petal Length", ylab = "Frequency", col = "lightblue")
+```
+
+## Conclusion
+
+The iris dataset provides valuable insights into the characteristics of different iris flower species. Here is a summary of the analysis:
+
+- The dataset consists of 150 observations and 5 variables.
+- The sepal length ranges from 4.3 to 7.9, with a mean of 5.84.
+- The sepal width ranges from 2.0 to 4.4, with a mean of 3.05.
+- The petal length ranges from 1.0 to 6.9, with a mean of 3.76.
+- The petal width ranges from 0.1 to 2.5, with a mean of 1.20.
+
+In summary, the exploratory data analysis revealed interesting patterns and distributions among the iris flower species. Further analysis and modeling can be performed on this dataset to address specific research questions or build predictive models.
+
+
+
