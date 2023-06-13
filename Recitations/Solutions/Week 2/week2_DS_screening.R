@@ -60,6 +60,7 @@ NPV = spec * (1 - prevalence)/ p_neg
 
 
 ## Extra stuff
+#  a user-defined function to avoid repetition of the same block of code used for a specific task
 calc_ppv = function(pp, pa, np, na, prev){
   Sens = pp/(pp + np)
   Spec = na/(na + pa)
