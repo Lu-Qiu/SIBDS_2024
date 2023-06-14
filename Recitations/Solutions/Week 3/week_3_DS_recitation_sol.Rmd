@@ -126,6 +126,13 @@ pups = janitor::clean_names(pups)
 # relative path
 pups = read_csv("./data/FAS_pups.csv")
 pups = janitor::clean_names(pups)
+
+# Take a quick look of your dataset
+#summary(pups)
+
+#gtsummary::tbl_summary(pups)
+
+#summarytools::dfSummary(pups)
 ```
   
 TO BE CONTINUED...
