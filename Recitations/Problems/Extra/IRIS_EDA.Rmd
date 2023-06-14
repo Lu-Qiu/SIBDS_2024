@@ -1,7 +1,7 @@
 ---
 title: "Data Analysis on Iris Dataset"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
-author: "SIBDS @ Columbia"
+author: "SIBDS 2023@ Columbia"
 output: 
   html_document:
     toc: true
@@ -11,7 +11,36 @@ output:
 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.align = "center",
+  fig.width = 6,
+  fig.asp   = .6,
+  out.width = "90%",
+  cache = TRUE
+)
+
+# set theme defaults
+theme_set(
+  theme_bw() +
+    theme(
+      legend.position = "bottom",
+      plot.title    = element_text(hjust = 0.5),
+      plot.subtitle = element_text(hjust = 0.5),
+      plot.caption  = element_text(hjust = 0.0)
+    )
+)
+
+# set color scale defaults
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill   = "viridis"
+)
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete   = scale_fill_viridis_d
 ```
 
 ```{r}
@@ -36,7 +65,7 @@ summary(iris)
 
 
 ```{r}
-gtsummary::tbl_summary(iris)
+dplyr::glimpse(iris)
 ```
 
 
@@ -48,7 +77,7 @@ plot(iris$Sepal.Length, iris$Sepal.Width, main = "Scatter Plot: Sepal Length vs.
 
 # Histogram of petal length
 hist(iris$Petal.Length, main = "Histogram: Petal Length",
-     xlab = "Petal Length", ylab = "Frequency", col = "lightblue")
+     xlab = "Petal Length", ylab = "Frequency")
 ```
 
 ## Conclusion
