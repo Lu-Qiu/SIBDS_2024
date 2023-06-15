@@ -135,8 +135,80 @@ pups = janitor::clean_names(pups)
 #summarytools::dfSummary(pups)
 ```
   
+2. Import the `FAS_pups.csv` again with column specifications by setting the `col_type` arguments. What happens if your specifications for column parsing aren’t reasonable (e.g. character instead of double, or vice versa)? 
+  
+```{r}
+# Let's see what happens together: 
+pups_bad = read_csv("./data/FAS_pups.csv", col_types = "cccccc")
+pups_bad = janitor::clean_names(pups_bad)
+skimr::skim(pups_bad) # skim is smart
+
+pups_really_bad = read_csv("./data/FAS_pups.csv", col_types = "iiiiii")
+pups_really_bad = janitor::clean_names(pups_really_bad)
+skimr::skim(pups_really_bad)
+```
 
 
+## Data Manipulation
+
+### Tasks:
+
+  1. In the pups data, select the columns containing litter number, sex, and PD ears. Then, do the following:
+      a. Filter to include only pups with `sex == 1`
+      b. Filter to include only pups with `pd_walk` less than 11 and `sex == 2`
+      c. Create a variable that subtracts 7 from `pd_pivot`
+      d. Create a variable that is the sum of all the `pd` variables
+```{r}
+# Your answer starts here:  
+# filter a
+pups %>% filter(sex == 1)
+
+# filter b
+pups %>% filter(pd_walk < 11 & sex == 2)
+
+# filter c
+pups_c <- pups %>%
+  mutate(pd_pivot_7 = pd_pivot - 7) %>%
+  relocate(pd_pivot_7)
+pups_c
+
+# filter d  
+pups_d <-
+  pups %>%
+  mutate(
+    pd_sum = pd_ears + pd_eyes + pd_pivot + pd_walk
+) 
+pups_d
+
+pups_d_na_rm <- 
+  pups %>%  
+  mutate(
+    pd_sum = rowSums(
+      select(., starts_with("pd_"), -ends_with("7")), 
+      na.rm = TRUE)
+    )
+pups_d_na_rm
+```
+      
+      
+  2. Write a chain of commands that:
+      - Loads the `pups` data from `FAS_pups.csv`
+      - Cleans the variable names
+      - Filters the data to include only `pups` with `sex == 1`
+      - Removes the `pd_ears` variable
+      - Creates a variable that indicates whether `pd_pivot` is 7 or more days
+```{r}
+# Your answer starts here:  
+# use pipe operator!
+pups_piped <- read_csv("data/FAS_pups.csv") %>%
+  janitor::clean_names() %>%
+  filter(sex == 1) %>%
+  select(-pd_ears) %>%
+  mutate(
+    pd_pivot_greater_7 = pd_pivot >= 7
+) 
+pups_piped
+```
   
 
 
