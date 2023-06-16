@@ -184,7 +184,7 @@ pups_d_na_rm <-
   pups %>%  
   mutate(
     pd_sum = rowSums(
-      select(., starts_with("pd_"), -ends_with("7")), 
+      select(., starts_with("pd_")), 
       na.rm = TRUE)
     )
 pups_d_na_rm
