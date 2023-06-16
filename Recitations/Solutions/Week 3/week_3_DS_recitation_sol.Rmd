@@ -188,6 +188,11 @@ pups_d_na_rm <-
       na.rm = TRUE)
     )
 pups_d_na_rm
+
+#rowSums(
+#  select(pups, starts_with("pd_"), -ends_with("7")), 
+#  na.rm = TRUE
+#)
 ```
       
       
