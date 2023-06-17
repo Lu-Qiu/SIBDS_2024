@@ -215,8 +215,23 @@ pups_piped <- read_csv("data/FAS_pups.csv") %>%
 pups_piped
 ```
   
+```{r}
+# practice on select
+starwars %>% head(6)
+starwars %>% select(name:mass)
 
+# more about filter
 
+# keep only the rows where at least one column has a non-missing value
+starwars %>% 
+  filter(if_any(everything(), ~ !is.na(.)))
+
+# keep only the rows where all columns have non-missing values
+starwars %>% 
+  filter(if_all(everything(), ~ !is.na(.)))
+
+```
+  
 
 
 

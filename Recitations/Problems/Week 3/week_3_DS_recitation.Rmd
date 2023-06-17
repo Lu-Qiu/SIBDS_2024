@@ -139,6 +139,7 @@ pups = janitor::clean_names(pups)
   
 ```{r}
 # Let's see what happens together: 
+
 ```
 
 
@@ -153,6 +154,22 @@ pups = janitor::clean_names(pups)
       d. Create a variable that is the sum of all the `pd` variables
 ```{r}
 # Your answer starts here:  
+# filter a
+filter(pups, sex == 1)
+pups %>% filter(., sex == 1)
+pups %>% filter(sex == 1)
+
+# filter b
+b_1 = pups %>% filter(pd_walk < 11, sex == 1) #1
+b_2 = pups %>% filter(pd_walk < 11 & sex == 1) #2
+
+# c
+pups$pd_pivot_7 = pups$pd_pivot - 7
+pups["pd_pivot_7_2"] = pups["pd_pivot"] - 7
+#pups[,9] = pups[,5] - 7 Better not
+
+# d
+
 ```
       
       
@@ -163,7 +180,13 @@ pups = janitor::clean_names(pups)
       - Removes the `pd_ears` variable
       - Creates a variable that indicates whether `pd_pivot` is 7 or more days
 ```{r}
-# Your answer starts here:  
+# Your answer starts here: 
+pups_piped = 
+  read_csv("./data/FAS_pups.csv") %>% 
+  janitor::clean_names() %>% 
+  filter(sex == 1) %>% 
+  select(-pd_ears) %>% 
+  mutate(pd_pivot_indicator = pd_pivot > 7)
 ```
 
 
