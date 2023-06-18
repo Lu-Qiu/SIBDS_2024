@@ -167,6 +167,12 @@ pups %>% filter(sex == 1)
 pups %>% filter(pd_walk < 11 & sex == 2)
 
 # filter c
+# base R style
+pups$pd_pivot_7 = pups$pd_pivot - 7
+pups["pd_pivot_7_2"] = pups["pd_pivot"] - 7
+#pups[,9] = pups[,5] - 7 Better not
+
+# using pipe operator
 pups_c <- pups %>%
   mutate(pd_pivot_7 = pd_pivot - 7) %>%
   relocate(pd_pivot_7)
