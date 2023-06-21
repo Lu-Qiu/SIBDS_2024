@@ -1,0 +1,136 @@
+---
+title: "Week 4 DS Recitation 1: Tidy Data"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+author: "SIBDS 2023@ Columbia" 
+output: 
+  html_document:
+    toc: true
+    code_folding: "show"
+---
+
+```{r setup, include=FALSE}
+set.seed(20230614)
+library(tidyverse)
+
+# set knitr defaults
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.align = "center",
+  fig.width = 6,
+  fig.asp   = .6, # if specified, fig.height = fig.width * fig.asp
+  out.width = "90%",
+  cache = TRUE
+)
+
+# set theme defaults
+theme_set(
+  theme_bw() +
+    theme(
+      legend.position = "bottom",
+      plot.title    = element_text(hjust = 0.5),
+      plot.subtitle = element_text(hjust = 0.5),
+      plot.caption  = element_text(hjust = 0.0)
+    )
+)
+
+# set color scale defaults
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill   = "viridis"
+)
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete   = scale_fill_viridis_d
+```
+
+## Getting Started
+
+### Tasks:
+
+  1. Create a new R project and named it `Week 4 DS Recitation`
+
+  2. Put the `week_4_DS_recitation_1_tidy_data.Rmd` file into the same folder of the R project you just created. 
+
+## Pivot longer
+
+### Tasks:
+  
+  1.The `billboard` dataset in `tidyr` package records the billboard rank of songs in the year 2000.
+```{r}
+billboard %>% head(10)
+``` 
+  
+  Reshape the dataset by changing the `wk1` to `wk76` to a variable called `week`, and the values to a variable called `rank`. Also try to use `values_drop_na` to drop rows that correspond to missing values (Not every song stays in the charts for all 76 weeks).   
+
+```{r}
+# Your answer starts here
+billboard %>% 
+  pivot_longer(
+    wk1:wk76, 
+    names_to = "week", 
+    values_to = "rank", 
+    values_drop_na = TRUE
+  )
+```
+  
+  
+  2. Redo the above reshaping process, convert the `week` variable to an integer this time.
+  
+```{r}
+# Your answer starts here
+billboard %>% 
+  pivot_longer(
+    cols = starts_with("wk"), 
+    names_to = "week", 
+    names_prefix = "wk",
+    names_transform = as.integer,
+    values_to = "rank",
+    values_drop_na = TRUE,
+  )
+```
+
+
+  4. The following `household` dataset contains information (or values) for each child in different families: their `name` and their `dob` (date of birth).
+```{r}
+head(household)
+```
+ As you can see, we have multiple records for some families since there is more than one child in that family. In this case, how can we tidy the data so that each row in the new dataset represents the record of a child in his/her family with the child's name, date of birth, and whether or not he/she is the first child? The following code give you the desired tidy dataset in a painful way.
+
+```{r eval = F}
+household %>% 
+  pivot_longer(
+    starts_with("dob_"),
+    names_to = "first_child",
+    names_prefix = "dob_",
+    values_to = "dob"
+  ) %>% 
+  pivot_longer(
+    starts_with("name_"),
+    names_to = "first_child_1",
+    names_prefix = "name_",
+    values_to = "name"
+  ) %>% 
+  filter(first_child == first_child_1) %>% 
+  select(-first_child_1) %>% 
+  mutate(first_child = first_child == "child1")
+```
+
+```{r}
+# Your answer starts here
+# Hint: try to use names_to = c(".value", first_child) in pivot_long()
+household %>% 
+  pivot_longer(
+    cols = !family, 
+    names_to = c(".value", "first_child"), 
+    names_sep = "_", 
+    values_drop_na = TRUE
+  ) %>% 
+  mutate(first_child = first_child == "child1")
+```
+
+
+
+
+
+  
