@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
   fig.width = 6,
   fig.asp   = .6, # if specified, fig.height = fig.width * fig.asp
   out.width = "90%",
-  cache = TRUE
+  cache = FALSE
 )
 
 # set theme defaults

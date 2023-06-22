@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
   fig.width = 6,
   fig.asp   = .6, # if specified, fig.height = fig.width * fig.asp
   out.width = "90%",
-  cache = TRUE
+  cache = FALSE
 )
 
 # set theme defaults
@@ -65,6 +65,16 @@ billboard %>% head(10)
 
 ```{r}
 # Your answer starts here
+billboard %>% 
+  pivot_longer(
+    # columns
+    wk1:wk76,
+    # names_to
+    names_to = "week",
+    # values_to
+    values_to = "rank",
+    values_drop_na = TRUE
+  )
 ```
   
   
@@ -72,6 +82,33 @@ billboard %>% head(10)
   
 ```{r}
 # Your answer starts here
+billboard %>% 
+  pivot_longer(
+    # columns
+    wk1:wk76,
+    # names_to
+    names_to = "week",
+    # values_to
+    values_to = "rank",
+    names_prefix = "wk",    
+    values_drop_na = TRUE
+  ) %>% 
+  mutate(
+    week = as.integer(week)
+  )
+
+billboard %>% 
+  pivot_longer(
+    # columns
+    wk1:wk76,
+    # names_to
+    names_to = "week",
+    # values_to
+    values_to = "rank",
+    names_prefix = "wk",    
+    values_drop_na = TRUE,
+    names_transform = as.integer
+  ) 
 ```
 
 
@@ -101,6 +138,14 @@ household %>%
 
 # Your answer starts here
 # Hint: try to use names_to = c(".value", first_child) in pivot_long()
+household %>% 
+  pivot_longer(
+    !family,
+    names_to = c(".value", "first_child"),
+    names_sep = "_",
+    values_drop_na = TRUE
+  ) %>% 
+  mutate(first_child = first_child == "child1")
 ```
 
 
