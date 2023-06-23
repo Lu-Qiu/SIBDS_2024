@@ -1,0 +1,167 @@
+---
+title: "Week 4 DS Recitation 2: Tidy Data"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+author: "SIBDS 2023@ Columbia" 
+output: 
+  html_document:
+    toc: true
+    code_folding: "show"
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+set.seed(20230614)
+library(tidyverse)
+
+# set knitr defaults
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.align = "center",
+  fig.width = 6,
+  fig.asp   = .6, # if specified, fig.height = fig.width * fig.asp
+  out.width = "90%",
+  cache = FALSE
+)
+
+# set theme defaults
+theme_set(
+  theme_bw() +
+    theme(
+      legend.position = "bottom",
+      plot.title    = element_text(hjust = 0.5),
+      plot.subtitle = element_text(hjust = 0.5),
+      plot.caption  = element_text(hjust = 0.0)
+    )
+)
+
+# set color scale defaults
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill   = "viridis"
+)
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete   = scale_fill_viridis_d
+```
+
+## Getting Started
+
+### Tasks:
+
+  1. Put the `week_4_DS_recitation_2_tidy_data.Rmd` file into the same folder of the R project you created. 
+
+## Pivot wider
+
+### Tasks:
+
+  1. The following `warpbreaks` dataset contains the warp break experiment results with nine replicates for every combination of `wool` (`A` and `B`) and `tension` (`L`, `M`, `H`):
+  
+```{r}
+warpbreaks
+```
+Try to run the following code, what happens if we attempt to pivot the levels of `wool` into the columns?
+
+```{r}
+warpbreaks %>% 
+  pivot_wider(
+    names_from = wool, 
+    values_from = breaks
+  )
+```
+Try to change the default setting of `values_fn` to get a wider dataframe summarizing the `mean` of those 9 experiment results (mean `breaks` for each combination of `wool` and `tension`).
+
+```{r}
+# Try to modify this code
+warpbreaks %>% 
+  pivot_wider(
+    names_from = wool, 
+    values_from = breaks,
+    values_fn = mean
+  )
+```
+
+  2. The `us_rent_income` dataset contains information about median income and rent for each state in the US for 2017. Here both `estimate` and `moe` (1.645 $\times$ SE) are values columns. Try to provide a summary of the data for each state in a single row, outlining both income and rent estimates as well as their variances.
+  
+```{r}
+us_rent_income
+# Your answer starts here
+us_rent_income %>% 
+  pivot_wider(
+    names_from = variable, 
+    values_from = c(estimate, moe)
+  )
+```
+It’s relatively rare to need `pivot_wider()` to make tidy data, but it’s often useful for creating summary tables for presentation, or data in a format needed by other tool
+ 
+
+## Longer then wider
+
+### Tasks:
+
+1. The `world_bank_pop` dataset contains data from the World Bank about population per country from 2000 to 2018.
+
+```{r}
+world_bank_pop
+```
+Try to tidy the data, you can follow these steps:
+
+  - Firstly, `year` is spread across multiple columns, we can use `pivot_longer` to put them into a single column
+  
+  - Next, focus on the `indicator`. Here `SP.POP.GROW` is population growth, `SP.POP.TOTL` is total population, and `SP.URB.*` are the same but only for urban areas. Let’s split this up into two variables: `area` (total or urban) and the actual `variable` (population or growth), you may need this : `separate(indicator, c("SP", "area", "variable"))`
+
+  - Finally, we can complete the tidying by pivoting (using `pivot_wider`) `variable` and `value` to make `TOTL` and `GROW` columns
+
+
+```{r}
+# Your answer starts here
+world_bank_pop %>% 
+  # aggregate years to one column
+  pivot_longer(
+    cols = `2000`:`2017`, 
+    names_to = "year", 
+    values_to = "value"
+  ) %>% 
+  # separate the indicator to 3 variables and drop the first one
+  separate(indicator, c(NA, "area", "variable")) %>% 
+  # summarize the 
+  pivot_wider(
+    names_from = variable, 
+    values_from = value
+  )
+```
+
+
+## Joining datasets
+
+### Tasks:
+
+  1. Install and load the `nycflights13` dataset use the following code. 
+
+```{r}
+if (!requireNamespace("nycflights13", quietly = TRUE)) {
+  install.packages("nycflights13")
+}
+
+library(nycflights13)
+```
+
+  2. Join the `weather` dataset to the `flights2` dataset (created by the following code) using `left_join`. Which variables are used in this joining process?
+  
+```{r}
+flights2 <- flights %>% select(year:day, hour, origin, dest, tailnum, carrier)
+# Your answer starts here
+flights2 %>% left_join(weather)
+```
+  
+  3. Join the `airports` dataset to the `flights2` dataset using `left_join`. The variable we want to use in the `airports` dataset is `faa`. Noticing that each flight has an origin (`origin`) and destination (`dest`) airport, so we need to specify which one we want to join to.
+  
+```{r}
+# Your answer starts here
+# joining based on destination
+flights2 %>% left_join(airports, c("dest" = "faa"))
+
+# joining based on origin
+flights2 %>% left_join(airports, c("origin" = "faa"))
+```
