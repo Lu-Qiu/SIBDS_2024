@@ -15,8 +15,8 @@ library(tidyverse)
 # set knitr defaults
 knitr::opts_chunk$set(
   echo = TRUE,
-  warning = FALSE,
-  message = FALSE,
+  warning = TRUE,
+  message = TRUE,
   fig.align = "center",
   fig.width = 6,
   fig.asp   = .6, # if specified, fig.height = fig.width * fig.asp
@@ -75,15 +75,21 @@ Try to change the default setting of `values_fn` to get a wider dataframe summar
 warpbreaks %>% 
   pivot_wider(
     names_from = wool, 
-    values_from = breaks
+    values_from = breaks,
+    values_fn = mean
   )
 ```
 
   2. The `us_rent_income` dataset contains information about median income and rent for each state in the US for 2017. Here both `estimate` and `moe` (1.645 $\times$ SE) are values columns. Try to provide a summary of the data for each state in a single row, outlining both income and rent estimates as well as their variances.
   
 ```{r}
-us_rent_income
+us_rent_income 
 # Your answer starts here
+us_rent_income %>% 
+  pivot_wider(
+    names_from = variable,
+    values_from = c(estimate, moe)
+  )
 ```
 It’s relatively rare to need `pivot_wider()` to make tidy data, but it’s often useful for creating summary tables for presentation, or data in a format needed by other tool
  
@@ -108,6 +114,20 @@ Try to tidy the data, you can follow these steps:
 
 ```{r}
 # Your answer starts here
+world_bank_pop %>% 
+  # aggregate years to one column
+  pivot_longer(
+    cols = `2000`:`2017`, 
+    names_to = "year", 
+    values_to = "value"
+  ) %>% 
+  # separate the indicator to 3 variables and drop the first one
+  separate(indicator, c(NA, "area", "variable")) %>% 
+  # summarize the 
+  pivot_wider(
+    names_from = variable, 
+    values_from = value
+  )
 ```
 
 
@@ -130,10 +150,17 @@ library(nycflights13)
 ```{r}
 flights2 <- flights %>% select(year:day, hour, origin, dest, tailnum, carrier)
 # Your answer starts here
+flights2 %>% left_join(weather)
 ```
   
   3. Join the `airports` dataset to the `flights2` dataset using `left_join`. The variable we want to use in the `airports` dataset is `faa`. Noticing that each flight has an origin (`origin`) and destination (`dest`) airport, so we need to specify which one we want to join to.
   
 ```{r}
 # Your answer starts here
+data(airports)
+flights2 %>% left_join(airports, by = join_by("origin" == "faa"))
+flights2 %>% left_join(airports, by = join_by("dest" == "faa"))
+
+left_join(flights2, airports, by = join_by("origin" == "faa"))
+right_join(flights2, airports, by = join_by("origin" == "faa"))
 ```
