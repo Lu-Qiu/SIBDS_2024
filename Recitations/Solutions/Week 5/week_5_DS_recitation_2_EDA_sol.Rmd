@@ -127,7 +127,8 @@ lagged_delays %>%
   ggplot(aes(y = dep_delay_mean, x = dep_delay_lag, color = origin)) +
   geom_point(alpha = 0.5) +
   scale_x_continuous(breaks = seq(0, 1500, by = 120)) +
-  labs(y = "Departure Delay", x = "Previous Departure Delay")
+  labs(y = "Departure Delay", x = "Previous Departure Delay") +
+  facet_wrap(.~origin)
 ```
 
 
