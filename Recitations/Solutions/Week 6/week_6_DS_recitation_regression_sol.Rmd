@@ -1,0 +1,185 @@
+---
+title: "Week 6 DS Recitation: Regression"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+author: "SIBDS 2023@ Columbia" 
+output: 
+  html_document:
+    toc: true
+    code_folding: "show"
+---
+
+```{r setup, include=FALSE}
+set.seed(20230614)
+library(tidyverse)
+
+# set knitr defaults
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.align = "center",
+  fig.width = 6,
+  fig.asp   = .6, # if specified, fig.height = fig.width * fig.asp
+  out.width = "90%",
+  cache = FALSE
+)
+
+# set theme defaults
+theme_set(
+  theme_bw() +
+    theme(
+      legend.position = "bottom",
+      plot.title    = element_text(hjust = 0.5),
+      plot.subtitle = element_text(hjust = 0.5),
+      plot.caption  = element_text(hjust = 0.0)
+    )
+)
+
+# set color scale defaults
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill   = "viridis"
+)
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete   = scale_fill_viridis_d
+```
+
+
+## Getting Started
+
+  1. Create a new R project and named it `Week 6 DS Recitation`
+
+  2. Put the `week_6_DS_recitation_regression.Rmd` file and the `birthweight.csv` into the same folder of the R project you just created.
+
+
+## Linear Regression
+
+In this problem, you will analyze data gathered to understand the effects of several variables on a child’s birth weight. This dataset (`birthweight.csv`), consists of roughly 4000 children and includes the following variables:
+
+- babysex: baby’s sex (male = 1, female = 2)
+- bhead: baby’s head circumference at birth (centimeters)
+- blength: baby’s length at birth (centimeteres)
+- bwt: baby’s birth weight (grams)
+- delwt: mother’s weight at delivery (pounds)
+- fincome: family monthly income (in hundreds, rounded)
+- frace: father’s race (1 = White, 2 = Black, 3 = Asian, 4 = Puerto Rican, 8 = Other, 9 = Unknown)
+- gaweeks: gestational age in weeks
+- malform: presence of malformations that could affect weight (0 = absent, 1 = present)
+- menarche: mother’s age at menarche (years)
+- mheigth: mother’s height (inches)
+- momage: mother’s age at delivery (years)
+- mrace: mother’s race (1 = White, 2 = Black, 3 = Asian, 4 = Puerto Rican, 8 = Other)
+- parity: number of live births prior to this pregnancy
+- pnumlbw: previous number of low birth weight babies
+- pnumgsa: number of prior small for gestational age babies
+- ppbmi: mother’s pre-pregnancy BMI
+- ppwt: mother’s pre-pregnancy weight (pounds)
+- smoken: average number of cigarettes smoked per day during pregnancy
+ -wtgain: mother’s weight gain during pregnancy (pounds)
+ 
+Load and clean the data using the code below for regression analysis.
+
+```{r}
+library(tidyverse)
+baby_df = 
+  read_csv("./birthweight.csv") %>% 
+  mutate(
+    babysex = case_when(babysex == 1~"male", babysex == 2~"female"),
+    malform = case_when(malform == 0~"absent", malform == 1 ~ "present")
+    ) %>% 
+  mutate(
+    across(
+      .cols = c("frace", "mrace"),
+      ~ case_when(
+        .x == 1 ~ "White",
+        .x == 2 ~ "Black",
+        .x == 3 ~ "Asian",
+        .x == 4 ~ "Puero Rican",
+        .x == 8 ~ "Other",
+        .x == 9 ~ "Unknown"
+        )
+      ),
+    across(where(is.character), as.factor)
+    ) 
+```
+
+
+1. Propose a regression model for birthweight. This model may be based on a hypothesized structure for the factors that underly birth weight, on a data-driven model-building process, or a combination of the two. Describe your modeling process and show a plot of model residuals against fitted values – use `add_predictions` and `add_residuals` in making this plot.
+
+```{r}
+# Your answer starts here
+proposal_model = 
+  lm(bwt ~ babysex + blength + gaweeks + momage + parity + ppwt + wtgain + smoken, data = baby_df)
+
+proposal_model %>% broom::tidy() %>% knitr::kable(digits = 3)
+
+proposal_plt =
+  baby_df %>% 
+  add_predictions(proposal_model) %>%
+  add_residuals(proposal_model) 
+
+library(patchwork)
+pred_plt1 = 
+  proposal_plt %>% 
+  ggplot(aes(x = pred, y = resid)) +
+  geom_point(alpha = .1)
+
+pred_plt2 = 
+  proposal_plt %>% 
+  ggplot(aes(x = bwt, y = pred)) +
+  geom_point(alpha = .1)
+
+pred_plt3 = 
+  proposal_plt %>% 
+  ggplot(aes(x = resid))+
+  geom_density()
+
+pred_plt1/pred_plt2/pred_plt3
+```
+
+2. (Chanllenging) Compare your model to two others:
+
+- One using length at birth and gestational age as predictors (main effects only)
+- One using head circumference, length, sex, and all interactions (including the three-way interaction) between these   
+
+```{r}
+# Your answer starts here
+# Take a look at the regressions first
+my_model = lm(bwt ~ babysex + blength + gaweeks + momage + parity + ppwt + wtgain + smoken, data = baby_df)
+simple_model = lm(bwt ~ bhead + gaweeks, data = baby_df)
+complex_model = lm(bwt ~ bhead*blength*babysex, data = baby_df)
+
+baby_cv = 
+  crossv_mc(baby_df, 100) %>% 
+  mutate(
+    my_model = map(train,  ~lm(bwt ~ babysex + blength + gaweeks + momage + parity + ppwt + wtgain + smoken, data = .x)),
+    simple_model = map(train, ~lm(bwt ~ bhead + gaweeks, data = .x)),
+    complex_model = map(train, ~lm(bwt ~ bhead*blength*babysex, data = .x)),
+    rmse_my = map2_dbl(my_model, test, ~rmse(model = .x, data = .y)),
+    rmse_simple = map2_dbl(simple_model, test, ~rmse(model = .x, data = .y)),
+    rmse_complex = map2_dbl(complex_model, test, ~rmse(model = .x, data = .y))
+  )
+
+baby_cv_tidy = 
+  baby_cv %>% 
+  select(starts_with("rmse")) %>% 
+  pivot_longer(
+    everything(),
+    names_to = "model",
+    values_to = "rmse",
+    names_prefix = "rmse_"
+  ) %>% 
+  mutate(model = fct_inorder(model))
+  
+
+baby_cv_tidy %>% 
+  ggplot(aes(x = model, y = rmse, group = model, color = model)) +
+  geom_violin(alpha = .3) +
+  theme(legend.position = "none") +
+  labs(
+    title = "RMSE for Three Models",
+    x = "Models",
+    y = "RMSE"
+  )
+```
+

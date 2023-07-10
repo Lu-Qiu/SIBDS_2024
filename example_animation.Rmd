@@ -1,0 +1,58 @@
+---
+title: "example_animation"
+author: "Ryan Wei"
+date: "2023-07-05"
+output: html_document
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(shiny)
+library(plotly)
+
+# Sample data frame
+week_start <- rep(seq(as.Date("2023-01-01"), as.Date("2023-01-31"), by = "week"), 50)
+cases_df <- data.frame(
+  week_start = rep(week_start, length(state.abb)),
+  code = rep(state.abb, length(week_start)),
+  weekly_cases = sample(1:100, length(week_start) * length(state.abb), replace = TRUE)
+)
+
+ui <- fluidPage(
+  plotlyOutput("myPlot")
+)
+
+server <- function(input, output, session) {
+  output$myPlot <- renderPlotly({
+    g <- list(
+      scope = 'usa',
+      bgcolor = 'rgba(0,0,0,0)'
+    )
+    
+    p <- plot_geo(cases_df, locationmode = 'USA-states') %>%
+      add_trace(
+        z = ~weekly_cases,
+        locations = ~code,
+        color = ~as.Date(week_start),
+        colorscale = 'Blues',
+        text = ~paste("State:", code, "<br>", "Cases:", weekly_cases),
+        hoverinfo = 'text',
+        frame = ~week_start,
+        frame_style = "animate"
+      ) %>%
+      layout(
+        geo = g,
+        title = "US Map Animation of Cases"
+      )
+
+    p
+  })
+}
+
+shinyApp(ui, server)
+```
+
