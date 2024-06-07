@@ -53,26 +53,27 @@ variance
 
 ## 6a
 
-mean_val = 172.2
+mean = 172.2
 std = 29.8
 
-ans_6a = pnorm(150, mean_val, std)
+ans_6a = pnorm(150, mean, std)
 ans_6a
 
 ## 6b
 
-ans_6b = 1 - pnorm(200, mean_val, std)
-ans_6b_upper = pnorm(200, mean_val, std, lower.tail = FALSE)
+ans_6b = 1 - pnorm(200, mean, std)
 ans_6b
+
+ans_6b_upper = pnorm(200, mean, std, lower.tail = FALSE)
 ans_6b_upper
 
 ## 6c
 
-ans_6c = pnorm(190, mean_val, std) - pnorm(140, mean_val, std)
+ans_6c = pnorm(190, mean, std) - pnorm(140, mean, std)
 ans_6c
 
 ## 6d
 
-ans_6d = pnorm(150, mean_val, std) + pnorm(190, mean_val, std, lower.tail = FALSE)
+ans_6d = pnorm(150, mean, std) + pnorm(190, mean, std, lower.tail = FALSE)
 # P(X < 150) + P(X)> 190
 ans_6d
