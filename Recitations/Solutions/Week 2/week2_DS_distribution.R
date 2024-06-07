@@ -1,21 +1,21 @@
 ##################################################################
-# June 8, 2023
-# Ryan Wei
+# June 7, 2024
+# Lu Qiu
 #
 # SIBDS practice with distributions functions in R
 ##################################################################
 
 # codes for Unit 3 Problem 5
 
+## Distribution: X ~ binomial(15,0.2)
+
 ## 5b
 
 n = 15
 pi = 0.20
 
-ans_5b = dbinom(4, size = n, prob = pi) # P(X = 4)
-#dbinom(4, pi, n)
-dbinom(4, n, pi)
-
+ans_5b = dbinom(4, n, pi)
+round(ans_5b, 3)
 ### Ans: 0.188
 
 ## 5c
@@ -26,25 +26,25 @@ round(ans_5c, 3)
 
 ## 5d
 
-ans_5d = pbinom(3, n, pi) # P(X = 0) + P(X = 1) + P(X = 2) + P(X = 3), CDF
+ans_5d = pbinom(3, n, pi) 
 ans_5d_sum = dbinom(0, n, pi) + dbinom(1, n, pi) + dbinom(2, n, pi) + dbinom(3, n, pi)
-round(ans_5d, 3) # PMF/PDF
+round(ans_5d, 3) 
 
 ### Ans: 0.648
 
 ## 5e
 
-ans_5e = 1 - pbinom(3,n,pi)
-ans_5e
-# lower.tail = TRUE gives us the left shaded area of a pdf
-ans_5e_upper = pbinom(3, n, pi, lower.tail = FALSE)
-round(ans_5e_upper, 3)
+ans_5e = 1 - pbinom(3, n, pi)
+round(ans_5e, 3)
 ### Ans: 0.352
 
 ## 5f
 
 exp_val = n * pi
-variance = n * pi * (1-pi)
+exp_val
+
+variance = n * pi * (1 - pi)
+variance
 
 ### Ans: 3, 2.4
 
