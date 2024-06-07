@@ -2,7 +2,7 @@
 # June 7, 2024
 # Lu Qiu
 #
-# SIBDS practice with distributions functions in R
+# SIBDS practice Week 2 Problem 2
 ##################################################################
 
 # codes for Unit 3 Problem 5

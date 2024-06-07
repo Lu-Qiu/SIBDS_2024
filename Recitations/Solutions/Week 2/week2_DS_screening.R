@@ -1,11 +1,11 @@
 ##################################################################
-# June 8, 2023
-# Ryan Wei
+# June 7, 2024
+# Lu Qiu 
 #
-# SIBDS practice with sensitivity, specificity, NPV, PPV
+# SIBDS practice Week 2 Problem 3
 ##################################################################
 
-# codes for Unit 3 Problem 6
+# codes for Unit 3 Problem 3
 
 pos_pre = 302 # 307
 pos_abs = 80 # 70
@@ -14,8 +14,8 @@ neg_abs = 372 # 400
 
 N = pos_abs + pos_pre +neg_abs + neg_pre
 
-prevalence = 0.10 # 0.20
 
+prevalence = 0.10
 # Calculate PPV NPV
 
 # Sens, Spec
