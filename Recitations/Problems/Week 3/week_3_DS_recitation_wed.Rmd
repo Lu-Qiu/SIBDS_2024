@@ -1,48 +1,9 @@
 ---
-title: "Week 3 DS Recitation"
+title: 'Week 3 DS Recitation Part 1'
 date: "`r format(Sys.time(), '%d %B, %Y')`"
-author: "SIBDS 2023@ Columbia" 
-output: 
-  html_document:
-    toc: true
-    code_folding: "show"
+author: "SIBDS 2024 @ Columbia"
+output: pdf_document
 ---
-
-```{r setup, include=FALSE}
-set.seed(20230614)
-library(tidyverse)
-
-# set knitr defaults
-knitr::opts_chunk$set(
-  echo = TRUE,
-  warning = FALSE,
-  message = FALSE,
-  fig.align = "center",
-  fig.width = 6,
-  fig.asp   = .6,
-  out.width = "90%",
-  cache = FALSE
-)
-
-# set theme defaults
-theme_set(
-  theme_bw() +
-    theme(
-      legend.position = "bottom",
-      plot.title    = element_text(hjust = 0.5),
-      plot.subtitle = element_text(hjust = 0.5),
-      plot.caption  = element_text(hjust = 0.0)
-    )
-)
-
-# set color scale defaults
-options(
-  ggplot2.continuous.colour = "viridis",
-  ggplot2.continuous.fill   = "viridis"
-)
-scale_colour_discrete = scale_colour_viridis_d
-scale_fill_discrete   = scale_fill_viridis_d
-```
 
 ## Getting Started
 
@@ -58,7 +19,7 @@ scale_fill_discrete   = scale_fill_viridis_d
 ---
 title: "Week 3 DS Recitation"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
-author: "SIBDS 2023@ Columbia" 
+author: "SIBDS 2024 @ Columbia" 
 output: 
   html_document:
     toc: true
@@ -82,81 +43,18 @@ output:
     
       * `abs_vec`: A `numeric` vector containing the absolute value (using `abs()`) of each element. 
   
-```{r sample_df}
-# Your answer starts here:  
-df1 = tibble(
-  random_vec = rnorm(500, mean = 1, sd = 3),
-  logical_vec = ifelse(random_vec > 0, TRUE, FALSE),
-  logical_vec_1 = random_vec > 0,
-  abs_vec = abs(random_vec)
-)
-```
-  
 
+  
   2. Produce a histogram of the absolute value variable just created.
   
-```{r sample_hist}
-# Your answer starts here:  
-abs_vec = pull(df1, abs_vec)
-abs_vec = df1$abs_vec
-abs_vec = df1[,4]
-abs_vec = df1["abs_vec"]
 
-ggplot(data = df1, aes(x = abs_vec)) + geom_histogram()
-hist(abs_vec$abs_vec)
-```
+
+  3. Fill in the blank using the in-line code giving the mean, median, and standard deviation of `random_vec` (*Hint*: you may need to use the `pull()` function in `tidyverse`):
   
-
-
-  4. Fill in the blank using the in-line code giving the mean, median, and standard deviation of `random_vec` (*Hint*: you may need to use the `pull()` function in `tidyverse`):
+      * Mean: REPLACE THIS BY YOUR CODE
   
-      * Mean: `r mean(df1$random_vec)`
+      * Median: REPLACE THIS BY YOUR CODE   
   
-      * Median: `r median(df1$random_vec)`   
-  
-      * SD: `r sd(df1$random_vec)`
-
-## Data Import
-
-### Tasks:
-
-  1. Load the `FAS_pups.csv` dataset. Use both absolute and relative paths
-  
-```{r}
-# Your answer starts here:
-working_dir = getwd()
-data_dir = paste0(working_dir,"/data/FAS_pups.csv")
-# absolute path
-pups = read_csv(data_dir)
-pups = janitor::clean_names(pups)
-# relative path
-pups = read_csv("./data/FAS_pups.csv")
-pups = janitor::clean_names(pups)
-
-# Take a quick look of your dataset
-#skimmr::skim()
-#summary(pups)
-
-gtsummary::tbl_summary(pups)
-
-summarytools::dfSummary(pups)
-```
-  
+      * SD: REPLACE THIS BY YOUR CODE
 
   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
