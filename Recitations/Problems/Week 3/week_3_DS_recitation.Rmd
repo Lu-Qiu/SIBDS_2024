@@ -9,7 +9,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-set.seed(20230614)
+set.seed(2024)
 library(tidyverse)
 
 # set knitr defaults
