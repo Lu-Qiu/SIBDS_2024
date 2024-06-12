@@ -68,7 +68,7 @@ output:
 
    Now, knit this `.Rmd` file to make sure it runs as expected.
 
-4. Finally, create a folder within the project folder named `data`. Put the data files we downloaded in Tuesday's class in to this folder. 
+4. Finally, create a folder within the project folder named `data`. 
 
 ## Writing with Data
 
