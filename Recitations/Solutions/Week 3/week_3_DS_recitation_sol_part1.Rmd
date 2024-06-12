@@ -102,6 +102,7 @@ ggplot(aes(x = abs_vec), data = df1) + geom_histogram()
 ```{r}
 # Another way
 df1 %>% ggplot(aes(x = abs_vec)) + geom_histogram()
+df1 |> ggplot(aes(x = abs_vec)) + geom_histogram()
 ```
 
 
