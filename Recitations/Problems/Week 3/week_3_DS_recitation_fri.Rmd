@@ -1,0 +1,68 @@
+---
+title: 'Week 3 DS Recitation Part 2'
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+author: "SIBDS 2024 @ Columbia"
+output: pdf_document
+---
+
+## Data Import
+
+### Tasks:
+
+  1. Load the `FAS_pups.csv` dataset. Use both absolute and relative paths.
+  
+```{r data_import}
+# Your answer starts here:  
+
+```
+
+  2. Import the `FAS_pups.csv` again with column specifications by setting the `col_type` arguments. What happens if your specifications for column parsing aren’t reasonable (e.g. character instead of double, or vice versa)? 
+  
+```{r}
+# Let's see what happens together: 
+
+```
+
+
+## Data Manipulation
+
+### Tasks:
+
+  1. In the pups data, select the columns containing litter number, sex, and PD ears. Then, do the following:
+      a. Filter to include only pups with `sex == 1`
+      b. Filter to include only pups with `pd_walk` less than 11 and `sex == 2`
+      c. Create a variable that subtracts 7 from `pd_pivot`
+      d. Create a variable that is the sum of all the `pd` variables
+      
+```{r}
+# Your answer starts here:  
+
+```
+      
+      
+  2. Write a chain of commands that:
+      - Loads the `pups` data from `FAS_pups.csv`
+      - Cleans the variable names
+      - Filters the data to include only `pups` with `sex == 1`
+      - Removes the `pd_ears` variable
+      - Creates a variable that indicates whether `pd_pivot` is 7 or more days
+      
+```{r}
+# Your answer starts here:  
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
