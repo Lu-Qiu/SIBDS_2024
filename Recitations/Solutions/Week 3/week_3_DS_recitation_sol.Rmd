@@ -168,6 +168,7 @@ skimr::skim(pups_bad_2)
       c. Filter to include only pups with `pd_walk` less than 11 and `sex == 2`
       d. Create a variable that subtracts 7 from `pd_pivot`
       e. Create a variable that is the sum of all the `pd` variables
+      f. Sort the variable `pd_eyes` in ascending order and `pd_walk` in descending order
 
 ```{r}
 # a
@@ -192,6 +193,11 @@ mutate(pups, pd_pivot_7 = pd_pivot - 7)
 ```{r}
 # e
 mutate(pups, pd_sum = pd_ears + pd_eyes + pd_pivot + pd_walk) 
+```
+
+```{r}
+# f
+arrange(pups, pd_eyes, desc(pd_walk))
 ```
 
       
