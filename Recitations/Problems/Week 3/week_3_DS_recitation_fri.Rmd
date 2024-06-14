@@ -41,7 +41,18 @@ output: pdf_document
 
 ```
       
-      
+  2. Write a chain of commands that:
+      - Loads the `pups` data from `FAS_pups.csv`
+      - Cleans the variable names
+      - Filters the data to include only `pups` with `sex == 1`
+      - Removes the `pd_ears` variable
+      - Creates a variable that indicates whether `pd_pivot` is 7 or more days
+```{r}
+# Your answer starts here:  
+
+```
+
+
 
 
 
