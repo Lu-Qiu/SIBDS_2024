@@ -125,13 +125,12 @@ pups = read_csv(data_dir)
 pups = janitor::clean_names(pups)
 # relative path
 pups = read_csv("./data/FAS_pups.csv")
+pups = read_csv("data/FAS_pups.csv")
 pups = janitor::clean_names(pups)
 
 # Take a quick look of your dataset
-#summary(pups)
-
-#gtsummary::tbl_summary(pups)
-
+head(pups, 5)
+skimr::skim(pups)
 ```
   
 2. Import the `FAS_pups.csv` again with column specifications by setting the `col_type` arguments. What happens if your specifications for column parsing aren’t reasonable (e.g. character instead of double, or vice versa)? 
