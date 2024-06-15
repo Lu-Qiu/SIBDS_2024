@@ -1,0 +1,224 @@
+---
+title: "Week 3 DS Recitation"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+author: "SIBDS 2024 @ Columbia" 
+output: 
+  html_document:
+    toc: true
+    code_folding: "show"
+---
+
+```{r setup, include=FALSE}
+set.seed(2024)
+library(tidyverse)
+
+# set knitr defaults
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.align = "center",
+  fig.width = 6,
+  fig.asp   = .6, # if specified, fig.height = fig.width * fig.asp
+  out.width = "90%",
+  cache = FALSE
+)
+
+# set theme defaults
+theme_set(
+  theme_bw() +
+    theme(
+      legend.position = "bottom",
+      plot.title    = element_text(hjust = 0.5),
+      plot.subtitle = element_text(hjust = 0.5),
+      plot.caption  = element_text(hjust = 0.0)
+    )
+)
+
+# set color scale defaults
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill   = "viridis"
+)
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete   = scale_fill_viridis_d
+```
+
+## Getting Started
+
+### Tasks:
+
+1. Create a new R project and named it `Week 3 DS Recitation`
+
+2. Put the `week_3_DS_recitation.Rmd` file into the same folder of the R project you just created. 
+
+3. Modify the YAML header as follows:
+
+```
+---
+title: "Week 3 DS Recitation"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+author: "SIBDS 2024 @ Columbia" 
+output: 
+  html_document:
+    toc: true
+    code_folding: "show"
+---
+```
+
+   Now, knit this `.Rmd` file to make sure it runs as expected.
+
+4. Finally, create a folder within the project folder named `data`. Put the data files we downloaded in Tuesday's class in to this folder. 
+
+## Writing with Data
+
+### Tasks:
+
+  1. Write a named code chunk names `sample_df` that creates a dataframe comprised of
+  
+      * `random_vec` : A `numeric` variable containing a random sample of size `500` from a normal variable with mean `1` and standard deviation `3`.
+    
+      * `logical_vec` : A `logical` vector indicating whether each sampled value is greater than zero, can you do it in the simplest way?
+    
+      * `abs_vec`: A `numeric` vector containing the absolute value (using `abs()`) of each element. 
+  
+```{r sample_df}
+# Your answer starts here: 
+df1 <- tibble(
+random_vec = rnorm(500, mean = 1, sd = 3),
+logical_vec = random_vec > 0,
+abs_vec = abs(random_vec)
+)
+```
+  
+
+  2. Produce a histogram of the absolute value variable just created.
+  
+```{r sample_hist}
+# Your answer starts here:  
+ggplot(aes(x = abs_vec), data = df1) + geom_histogram()
+#df1 %>% ggplot(aes(x = abs_vec)) + geom_histogram()
+```
+  
+
+
+  4. Fill in the blank using the in-line code giving the mean, median, and standard deviation of `random_vec` (*Hint*: you may need to use the `pull()` function and  in `tidyverse`), round them to two decimal places.
+  
+      * Mean: `r round(mean(pull(df1, random_vec)),2)`
+  
+      * Median: `r round(median(pull(df1, random_vec)),2)`   
+  
+      * SD: `r round(sd(pull(df1, random_vec)),2)`
+
+## Data Import
+
+### Tasks:
+
+  1. Load the `FAS_pups.csv` dataset. Use both absolute and relative paths
+  
+```{r data_import}
+# Your answer starts here:  
+working_dir = getwd()
+data_dir = paste0(working_dir,"/data/FAS_pups.csv")
+# absolute path
+pups = read_csv(data_dir)
+pups = janitor::clean_names(pups)
+# relative path
+pups = read_csv("./data/FAS_pups.csv")
+pups = read_csv("data/FAS_pups.csv")
+pups = janitor::clean_names(pups)
+
+# Take a quick look of your dataset
+head(pups, 5)
+skimr::skim(pups)
+```
+  
+2. Import the `FAS_pups.csv` again with column specifications by setting the `col_type` arguments. What happens if your specifications for column parsing aren’t reasonable (e.g. character instead of double, or vice versa)? 
+
+```{r}
+pups = read_csv("./data/FAS_pups.csv", col_types = "cddddd")
+pups = janitor::clean_names(pups)
+skimr::skim(pups)
+```
+
+```{r}
+# character instead of double 
+pups_bad = read_csv("./data/FAS_pups.csv", col_types = "cccccc")
+pups_bad = janitor::clean_names(pups_bad)
+skimr::skim(pups_bad) 
+```
+
+
+```{r}
+# double instead of character
+pups_bad_2 = read_csv("./data/FAS_pups.csv", col_types = "dddddd")
+pups_bad_2 = janitor::clean_names(pups_bad_2)
+skimr::skim(pups_bad_2)
+```
+
+
+## Data Manipulation
+
+### Tasks:
+
+  1. In the pups data, do the following:
+      a. select the columns containing litter number, sex, and PD ears
+      b. Filter to include only pups with `sex == 1`
+      c. Filter to include only pups with `pd_walk` less than 11 and `sex == 2`
+      d. Create a variable that subtracts 7 from `pd_pivot`
+      e. Create a variable that is the sum of all the `pd` variables
+      f. Sort the variable `pd_eyes` in ascending order and `pd_walk` in descending order
+
+```{r}
+# a
+select(pups, litter_number, sex, pd_ears)
+```
+
+```{r}
+# b
+filter(pups, sex == 1)
+```
+
+```{r}
+# c
+filter(pups, pd_walk < 11 & sex == 2)
+```
+
+```{r}
+# d
+mutate(pups, pd_pivot_7 = pd_pivot - 7)
+```
+
+```{r}
+# e
+mutate(pups, pd_sum = pd_ears + pd_eyes + pd_pivot + pd_walk) 
+```
+
+```{r}
+# f
+arrange(pups, pd_eyes, desc(pd_walk))
+```
+
+      
+  2. Write a chain of commands that:
+      - Loads the `pups` data from `FAS_pups.csv`
+      - Cleans the variable names
+      - Filters the data to include only `pups` with `sex == 1`
+      - Removes the `pd_ears` variable
+      - Creates a variable that indicates whether `pd_pivot` is 7 or more days
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
