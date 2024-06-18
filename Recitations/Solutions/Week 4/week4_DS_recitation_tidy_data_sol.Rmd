@@ -210,10 +210,12 @@ flights2 <- flights %>% select(year:day, hour, origin, dest, tailnum, carrier)
 # Your answer starts here
 flights2 %>% left_join(weather)
 ```
-  
+`origin`, `year`, `month`, `day`, `hour` are variables used in this joining process.
+
   3. Join the `airports` dataset to the `flights2` dataset using `left_join`. The variable we want to use in the `airports` dataset is `faa`. Noticing that each flight has an origin (`origin`) and destination (`dest`) airport, so we need to specify which one we want to join to.
   
 ```{r}
+data(airports)
 # Your answer starts here
 # joining based on destination
 flights2 %>% left_join(airports, c("dest" = "faa"))
