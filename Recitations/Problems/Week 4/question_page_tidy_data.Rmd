@@ -6,7 +6,7 @@ output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
-set.seed(20230614)
+set.seed(2024)
 library(tidyverse)
 
 # set knitr defaults
@@ -70,19 +70,6 @@ Reshape the dataset by changing the `wk1` to `wk76` to a variable called `week`,
 ```
 
 
-3. The following `household` dataset contains information (or values) for each child in different families: their `name` and their `dob` (date of birth).
-```{r}
-
-```
-
-As you can see, we have multiple records for some families since there is more than one child in that family. In this case, how can we tidy the data so that each row in the new dataset represents the record of a child in his/her family with the child's name, date of birth, and whether or not he/she is the first child? The following code give you the desired tidy dataset in a painful way.
-
-```{r eval = F}
-
-
-```
-
-
 ## Pivot wider
 
 ### Tasks:
@@ -110,7 +97,7 @@ warpbreaks %>%
   )
 ```
 
-2. The `us_rent_income` dataset contains information about median income and rent for each state in the US for 2017. Here both `estimate` and `moe` (1.645 $\times$ SE) are values columns. Try to provide a summary of the data for each state in a single row, outlining both income and rent estimates as well as their variances.
+2. The `us_rent_income` dataset contains information about median income and rent for each state in the US for 2017. Here both `estimate` and `moe` (1.645 $\times$ SE) are values columns. Try to provide a summary of the data for each state in a single row, outlining both income and rent estimates for each `variable`.
   
 ```{r}
 # Your answer starts here
@@ -118,7 +105,6 @@ warpbreaks %>%
 ```
 
 
- 
 ## Longer then wider
 
 ### Tasks:
@@ -132,7 +118,7 @@ Try to tidy the data, you can follow these steps:
 
   - Firstly, `year` is spread across multiple columns, we can use `pivot_longer` to put them into a single column
   
-  - Next, focus on the `indicator`. Here `SP.POP.GROW` is population growth, `SP.POP.TOTL` is total population, and `SP.URB.*` are the same but only for urban areas. Let’s split this up into two variables: `area` (total or urban) and the actual `variable` (population or growth), you may need this : `separate(indicator, c("SP", "area", "variable"))`
+  - Next, focus on the `indicator`. Here `SP.POP.GROW` is population growth, `SP.POP.TOTL` is total population, and `SP.URB.*` are the same but only for urban areas. Let’s split this up into two variables: `area` (total or urban) and the actual `variable` (population or growth), you may need this : `separate(indicator, c(NA, "area", "variable"))`
 
   - Finally, we can complete the tidying by pivoting (using `pivot_wider`) `variable` and `value` to make `TOTL` and `GROW` columns
 
@@ -158,7 +144,12 @@ library(nycflights13)
 ```
 
 2. Join the `weather` dataset to the `flights2` dataset (created by the following code) using `left_join`. Which variables are used in this joining process?
-  
+
+```{r eval=FALSE}
+data(weather)
+data(flights)
+```
+
 ```{r}
 flights2 <- flights %>% select(year:day, hour, origin, dest, tailnum, carrier)
 # Your answer starts here
@@ -167,10 +158,12 @@ flights2 <- flights %>% select(year:day, hour, origin, dest, tailnum, carrier)
   
 3. Join the `airports` dataset to the `flights2` dataset using `left_join`. The variable we want to use in the `airports` dataset is `faa`. Noticing that each flight has an origin (`origin`) and destination (`dest`) airport, so we need to specify which one we want to join to.
   
+```{r eval=FALSE}
+data(airports)
+```
+
 ```{r}
 # Your answer starts here
-data(airports)
-
 ```
 
 
