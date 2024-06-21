@@ -101,7 +101,7 @@ noaa_df %>%
   filter(month %in% c("January", "July")) %>% 
   group_by(year, month, id) %>% 
   summarise(mean_of_tmax = mean(tmax,na.rm = TRUE)) %>% 
-  ggplot(aes(x = year ,y = mean_of_tmax)) + 
+  ggplot(aes(x = year, y = mean_of_tmax)) + 
   geom_boxplot(aes(fill = year)) +
   facet_grid(.~month) +
   labs(
@@ -123,10 +123,11 @@ noaa_df %>%
 ```{r}
 library(ggridges)
 library(patchwork)
+
 tmax_tmin =
   noaa_df %>%
   ggplot(aes(x = tmax, y = tmin)) +
-  geom_bin2d() +
+  geom_hex() +
   geom_smooth(method = "lm") +
     labs(
     title = "Max vs Min Temperature",
