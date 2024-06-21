@@ -107,6 +107,13 @@ if (!requireNamespace("p8105.datasets", quietly = TRUE)) {
 
 library(p8105.datasets)
 data("ny_noaa")
+
+
+```
+
+
+```{r}
+ny_noaa = read_csv("data/nynoaadat.csv")
 ```
 
 Here, I did some basic cleaning for you:

@@ -1,0 +1,110 @@
+---
+title: "Week 4 DS Recitation: Data Visualization Part 1"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+author: "SIBDS 2024 @ Columbia" 
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+set.seed(2024)
+library(tidyverse)
+
+# set knitr defaults
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.align = "center",
+  fig.width = 6,
+  fig.asp   = .6, # if specified, fig.height = fig.width * fig.asp
+  out.width = "90%",
+  cache = FALSE
+)
+
+# set theme defaults
+theme_set(
+  theme_bw() +
+    theme(
+      legend.position = "bottom",
+      plot.title    = element_text(hjust = 0.5),
+      plot.subtitle = element_text(hjust = 0.5),
+      plot.caption  = element_text(hjust = 0.0)
+    )
+)
+
+# set color scale defaults
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill   = "viridis"
+)
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete   = scale_fill_viridis_d
+```
+
+
+Here is a useful link of ggplot cheatsheets: https://github.com/rstudio/cheatsheets/blob/main/data-visualization.pdf
+
+
+## Getting Started
+
+  1. Open the R project `week4_DS_recitation`
+  2. Create a `data` folder. Download the NOAA data and put it in the data folder.
+  3. Put the `week4_DS_recitation_data_viz_1.Rmd` file into the same folder of the R project. 
+
+
+## Visualization
+
+We are going to use NY NOAA data.
+
+```{r}
+ny_noaa = read_csv("data/nynoaadat.csv")
+```
+
+Here, I did some basic cleaning for you:
+
+```{r}
+noaa_df = ny_noaa %>% 
+  separate(date, into = c("year","month","day"),sep = "-") %>% 
+  mutate(
+    year = as.factor(year),
+    month = as.integer(month),
+    month = (month.name[month]),
+    day = as.factor(day),
+    prcp = prcp / 10,
+    tmax = as.numeric(tmax),
+    tmin = as.numeric(tmin),
+    tmax = tmax / 10,
+    tmin = tmin / 10
+  ) 
+
+# Here is a table shows the most common observations of snowfall
+noaa_df %>% 
+  count(snow, name = "n_of_observations") %>% 
+  drop_na(snow) %>% 
+  arrange(desc(n_of_observations)) %>% 
+  head(n = 5)
+```
+
+### Tasks:
+
+Please complete the following tasks:
+
+  1. Make a two-panel plot showing the average max temperature in January and in July in each station across years. Is there any observable / interpretable structure? Any outliers?
+  
+```{r}
+# You may start with this processed data
+noaa_df %>%
+  #focus on Jan and Jul
+  filter(month %in% c("January", "July")) %>% 
+  group_by(year, month, id) %>% 
+  summarise(mean_of_tmax = mean(tmax,na.rm = TRUE))
+```
+  
+
+  2. Make a two-panel plot showing:
+  
+  (i) `tmax` vs `tmin` for the full dataset (note that a scatterplot may not be the best option); and 
+  (ii) make a plot showing the distribution of snowfall values greater than 0 and less than 100 separately by year.
+  
+
+
