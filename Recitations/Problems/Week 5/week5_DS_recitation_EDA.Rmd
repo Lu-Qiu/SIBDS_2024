@@ -1,7 +1,7 @@
 ---
-title: "Week 5 DS Recitation 2: Exploratory Data Analysis"
+title: "Week 5 DS Recitation: Data Analysis"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
-author: "SIBDS 2023@ Columbia" 
+author: "SIBDS 2024 @ Columbia" 
 output: 
   html_document:
     toc: true
@@ -9,7 +9,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-set.seed(20230614)
+set.seed(2024)
 library(tidyverse)
 
 # set knitr defaults
@@ -46,8 +46,10 @@ scale_fill_discrete   = scale_fill_viridis_d
 
 
 ## Getting Started
-
-  1. Put the `week_5_DS_recitation_2_EDA.Rmd` file into the same folder of the R project you created on Wednesday. 
+  
+  1. Create a new R project and named it `week5_DS_recitation`
+  
+  2. Put the `week5_DS_recitation_data_viz_2.Rmd` file into the same folder of the R project you created. 
 
 
 ## EDA with `nycflights13`
@@ -75,7 +77,6 @@ flights %>%
 flights %>% 
   filter(!is.na(tailnum), is.na(arr_time) | !is.na(arr_delay))
 ```
-
 
 
 

@@ -9,10 +9,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="SIBDS 2023@ Columbia" />
+<meta name="author" content="SIBDS 2024 @ Columbia" />
 
 
-<title>Week 5 DS Recitation 2: Exploratory Data Analysis</title>
+<title>Week 5 DS Recitation: Data Analysis</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -437,10 +437,9 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">Week 5 DS Recitation 2: Exploratory Data
-Analysis</h1>
-<h4 class="author">SIBDS 2023@ Columbia</h4>
-<h4 class="date">29 June, 2023</h4>
+<h1 class="title toc-ignore">Week 5 DS Recitation: Data Analysis</h1>
+<h4 class="author">SIBDS 2024 @ Columbia</h4>
+<h4 class="date">25 June, 2024</h4>
 
 </div>
 
@@ -459,8 +458,10 @@ with <code>nycflights13</code></a>
 <div id="getting-started" class="section level2">
 <h2>Getting Started</h2>
 <ol style="list-style-type: decimal">
-<li>Put the <code>week_5_DS_recitation_2_EDA.Rmd</code> file into the
-same folder of the R project you created on Wednesday.</li>
+<li><p>Create a new R project and named it
+<code>week5_DS_recitation</code></p></li>
+<li><p>Put the <code>week5_DS_recitation_data_viz_2.Rmd</code> file into
+the same folder of the R project you created.</p></li>
 </ol>
 </div>
 <div id="eda-with-nycflights13" class="section level2">
@@ -501,6 +502,26 @@ flights %&gt;%
 ##  9  2013     1     1      557            600        -3      838            846
 ## 10  2013     1     1      558            600        -2      753            745
 ## # ℹ 334,254 more rows
+## # ℹ 11 more variables: arr_delay &lt;dbl&gt;, carrier &lt;chr&gt;, flight &lt;int&gt;,
+## #   tailnum &lt;chr&gt;, origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;,
+## #   hour &lt;dbl&gt;, minute &lt;dbl&gt;, time_hour &lt;dttm&gt;</code></pre>
+<pre class="r"><code># Your answer starts here
+flights %&gt;% 
+  filter(!is.na(tailnum), is.na(arr_time) | !is.na(arr_delay))</code></pre>
+<pre><code>## # A tibble: 333,547 × 19
+##     year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt;    &lt;int&gt;          &lt;int&gt;
+##  1  2013     1     1      517            515         2      830            819
+##  2  2013     1     1      533            529         4      850            830
+##  3  2013     1     1      542            540         2      923            850
+##  4  2013     1     1      544            545        -1     1004           1022
+##  5  2013     1     1      554            600        -6      812            837
+##  6  2013     1     1      554            558        -4      740            728
+##  7  2013     1     1      555            600        -5      913            854
+##  8  2013     1     1      557            600        -3      709            723
+##  9  2013     1     1      557            600        -3      838            846
+## 10  2013     1     1      558            600        -2      753            745
+## # ℹ 333,537 more rows
 ## # ℹ 11 more variables: arr_delay &lt;dbl&gt;, carrier &lt;chr&gt;, flight &lt;int&gt;,
 ## #   tailnum &lt;chr&gt;, origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;,
 ## #   hour &lt;dbl&gt;, minute &lt;dbl&gt;, time_hour &lt;dttm&gt;</code></pre>
