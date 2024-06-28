@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
   warning = FALSE,
   message = FALSE,
   fig.align = "center",
-  fig.width = 6,
+  fig.width = 10,
   fig.asp   = .6, # if specified, fig.height = fig.width * fig.asp
   out.width = "90%",
   cache = FALSE
@@ -49,7 +49,7 @@ scale_fill_discrete   = scale_fill_viridis_d
   
   1. Create a new R project and named it `week5_DS_recitation`
   
-  2. Put the `week5_DS_recitation_data_viz_2.Rmd` file into the same folder of the R project you created. 
+  2. Put the `week5_DS_recitation_EDA.Rmd` file into the same folder of the R project you created. 
 
 
 ## EDA with `nycflights13`
@@ -71,13 +71,16 @@ data("flights")
 
 ```{r}
 # Your answer starts here
-flights %>%
-  filter(!is.na(tailnum))
-# Your answer starts here
 flights %>% 
-  filter(!is.na(tailnum), is.na(arr_time) | !is.na(arr_delay))
+  filter(!is.na(tailnum), !is.na(arr_time), !is.na(arr_delay))
 ```
 
+```{r}
+# using mean arr_delay
+flights %>%
+  filter(!is.na(tailnum), !is.na(arr_time), !is.na(arr_delay))
+
+```
 
 
 2. What time of day (`hour`) should you fly if you want to avoid delays as much as possible?
