@@ -539,7 +539,10 @@ explore how the delay of a flight is related to the delay of the
 immediately preceding flight, please use a plot to display the
 relationship. .</li>
 </ol>
-<pre class="r"><code># Your answer starts here</code></pre>
+<pre class="r"><code># Your answer starts here
+lagged_delays &lt;- flights %&gt;%
+  arrange(origin, month, day, dep_time) %&gt;%
+  group_by(origin) </code></pre>
 </div>
 </div>
 

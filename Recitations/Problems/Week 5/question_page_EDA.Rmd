@@ -2,10 +2,7 @@
 title: "Week 5 DS Recitation: Exploratory Data Analysis"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 author: "SIBDS 2024 @ Columbia" 
-output: 
-  html_document:
-    toc: true
-    code_folding: "show"
+output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
