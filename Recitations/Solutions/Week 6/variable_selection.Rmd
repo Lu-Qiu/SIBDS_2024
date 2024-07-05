@@ -1,0 +1,114 @@
+---
+title: "Variable Selection Using LASSO"
+author: "Lu Qiu"
+date: "2024-07-05"
+output: html_document
+---
+```{r setup, include=FALSE}
+library(tidyverse)
+# set knitr defaults
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.align = "center",
+  fig.width = 6,
+  fig.asp   = .6, # if specified, fig.height = fig.width * fig.asp
+  out.width = "90%",
+  cache = FALSE
+)
+
+# set theme defaults
+theme_set(
+  theme_bw() +
+    theme(
+      legend.position = "bottom",
+      plot.title    = element_text(hjust = 0.5),
+      plot.subtitle = element_text(hjust = 0.5),
+      plot.caption  = element_text(hjust = 0.0)
+    )
+)
+
+# set color scale defaults
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill   = "viridis"
+)
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete   = scale_fill_viridis_d
+```
+
+```{r}
+library(tidyverse)
+library(caret)
+library(glmnet)
+library(tidymodels)
+```
+
+
+```{r}
+baby_df = 
+  read_csv("./data/birthweight.csv") %>% 
+  mutate(
+    babysex = case_when(babysex == 1~"male", babysex == 2~"female"),
+    malform = case_when(malform == 0~"absent", malform == 1 ~ "present")
+    ) %>% 
+  mutate(
+    across(
+      .cols = c("frace", "mrace"),
+      ~ case_when(
+        .x == 1 ~ "White",
+        .x == 2 ~ "Black",
+        .x == 3 ~ "Asian",
+        .x == 4 ~ "Puero Rican",
+        .x == 8 ~ "Other",
+        .x == 9 ~ "Unknown"
+        )
+      ),
+    across(where(is.character), as.factor)
+    ) %>% 
+  select(
+    -c(pnumlbw, pnumsga, wtgain))
+```
+
+```{r}
+baby_df <- na.omit(baby_df)
+```
+
+```{r}
+set.seed(2024)
+# Split the data
+data_split <- initial_split(baby_df, prop = 0.8)
+# Extract the training and testing data
+training_data <- training(data_split)
+testing_data <- testing(data_split)
+```
+
+
+```{r}
+# Set the Cross-validation method
+ctrl1 <- trainControl(method = "cv", number = 10)
+```
+
+```{r}
+set.seed(2024)
+lasso.fit <- train(bwt ~ .,
+                   data = training_data,
+                   method = "glmnet",
+                   tuneGrid = expand.grid(
+                     alpha = 1,
+                     lambda = exp(seq(6, -2, length = 100))),
+                   trControl = ctrl1)
+
+plot(lasso.fit, xTrans = log)
+```
+
+
+
+```{r}
+lasso.fit$bestTune
+```
+
+```{r}
+coef(lasso.fit$finalModel, lasso.fit$bestTune$lambda)
+```
