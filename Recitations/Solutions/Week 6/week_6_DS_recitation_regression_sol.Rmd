@@ -118,6 +118,8 @@ proposal_model =
 proposal_model_1 = 
   lm(bwt ~ ., data = baby_df)
 
+# Variable selection: LASSO, Elastic Net
+
 proposal_model %>% broom::tidy() %>% knitr::kable(digits = 3)
 proposal_model_1 %>% broom::tidy() %>% knitr::kable(digits = 3)
 ```
