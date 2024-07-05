@@ -1,7 +1,7 @@
 ---
 title: "Week 6 DS Recitation: Regression"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
-author: "SIBDS 2023@ Columbia" 
+author: "SIBDS 2024 @ Columbia" 
 output: 
   html_document:
     toc: true
@@ -9,7 +9,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-set.seed(20230614)
+set.seed(2024)
 library(tidyverse)
 
 # set knitr defaults
@@ -47,9 +47,10 @@ scale_fill_discrete   = scale_fill_viridis_d
 
 ## Getting Started
 
-  1. Create a new R project and named it `Week 6 DS Recitation`
-
-  2. Put the `week_6_DS_recitation_regression.Rmd` file and the `birthweight.csv` into the same folder of the R project you just created.
+  1. Create a new R project and named it `week6_DS_recitation`
+  2. Put the `week6_DS_recitation_regression.Rmd` file into the same folder of the R project you just created.
+  3. Create a folder within the project folder named `data`.
+  4. Download the `birthweight.csv` dataset and put it in the `data` folder.
 
 
 ## Linear Regression
@@ -82,7 +83,7 @@ Load and clean the data using the code below for regression analysis.
 ```{r}
 library(tidyverse)
 baby_df = 
-  read_csv("./birthweight.csv") %>% 
+  read_csv("./data/birthweight.csv") %>% 
   mutate(
     babysex = case_when(babysex == 1~"male", babysex == 2~"female"),
     malform = case_when(malform == 0~"absent", malform == 1 ~ "present")
@@ -100,21 +101,25 @@ baby_df =
         )
       ),
     across(where(is.character), as.factor)
-    ) 
+    ) %>% 
+  select(
+    -c(pnumlbw, pnumsga, wtgain))
 ```
 
+### Model Fitting
 
-1. Propose a regression model for birthweight. This model may be based on a hypothesized structure for the factors that underly birth weight, on a data-driven model-building process, or a combination of the two. Describe your modeling process and show a plot of model residuals against fitted values – use `add_predictions` and `add_residuals` in making this plot.
+1. Propose a regression model for birthweight. This model may be based on a hypothesized structure for the factors that underlie birth weight, on a data-driven model-building process, or a combination of the two. Describe your modeling process and show a plot of model residuals against fitted values – use `add_predictions` and `add_residuals` in making this plot.
 
 ```{r}
 # Your answer starts here
 ```
 
-2. (Chanllenging) Compare your model to two others:
+### Hypothesis Testing
 
-- One using length at birth and gestational age as predictors (main effects only)
-- One using head circumference, length, sex, and all interactions (including the three-way interaction) between these   
+2. Compare the two models:
 
+- One using length at birth(`blength`) and gestational age (`gaweeks`) as predictors 
+- One using length at birth(`blength`), gestational age (`gaweeks`), and head circumference(`bhead`) as predictors.
 ```{r}
 # Your answer starts here
 ```

@@ -2,10 +2,7 @@
 title: "Week 6 DS Recitation: Regression"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 author: "SIBDS 2024 @ Columbia" 
-output: 
-  html_document:
-    toc: true
-    code_folding: "show"
+output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
@@ -106,50 +103,21 @@ baby_df =
     -c(pnumlbw, pnumsga, wtgain))
 ```
 
-### Model fitting
+### Model Fitting
+
 1. Propose a regression model for birthweight. This model may be based on a hypothesized structure for the factors that underlie birth weight, on a data-driven model-building process, or a combination of the two. Describe your modeling process and show a plot of model residuals against fitted values – use `add_predictions` and `add_residuals` in making this plot.
 
 ```{r}
 # Your answer starts here
-proposal_model = 
-  lm(bwt ~ babysex + bhead + blength + gaweeks, data = baby_df)
-
-# Fit a model using all available predictors
-proposal_model_1 = 
-  lm(bwt ~ ., data = baby_df)
-
-proposal_model %>% broom::tidy() %>% knitr::kable(digits = 3)
-proposal_model_1 %>% broom::tidy() %>% knitr::kable(digits = 3)
 ```
 
-
-```{r}
-proposal_plt =
-  baby_df %>% 
-  modelr::add_predictions(proposal_model) %>%
-  modelr::add_residuals(proposal_model) 
-
-proposal_plt %>% 
-  ggplot(aes(x = pred, y = resid)) +
-  geom_point(alpha = .1)
-```
-
-### Hypothesis testing
+### Hypothesis Testing
 
 2. Compare the two models:
 
 - One using length at birth(`blength`) and gestational age (`gaweeks`) as predictors 
 - One using length at birth(`blength`), gestational age (`gaweeks`), and head circumference(`bhead`) as predictors.
-
 ```{r}
 # Your answer starts here
-
-simple_model = lm(bwt ~ blength + gaweeks, data = baby_df)
-complex_model = lm(bwt ~ blength + gaweeks + bhead, data = baby_df)
-
-anova(simple_model, complex_model) %>% 
-  broom::tidy()
-
-# p-value < 0.05, reject the null.
 ```
 
