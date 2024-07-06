@@ -47,7 +47,7 @@ scale_fill_discrete   = scale_fill_viridis_d
 
 ## Getting Started
 
-  1. Create a new R project and named it `week6_DS_recitation`
+  1. Create a new R project and name it `week6_DS_recitation`
   2. Put the `week6_DS_recitation_regression.Rmd` file into the same folder of the R project you just created.
   3. Create a folder within the project folder named `data`.
   4. Download the `birthweight.csv` dataset and put it in the `data` folder.
